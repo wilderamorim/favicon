@@ -1,0 +1,29 @@
+{
+  "name": "elephpant/favicon",
+  "description": "A simple way to generate multiple favicons.",
+  "keywords": [
+    "ElePHPant",
+    "Favicon"
+  ],
+  "homepage": "https://www.uebi.com.br",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Wilder Amorim",
+      "email": "agencia@uebi.com.br",
+      "homepage": "https://www.uebi.com.br",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "php": "^7.1",
+    "ext-gd": "*",
+    "ext-fileinfo": "*",
+    "ext-simplexml": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "ElePHPant\\Favicon\\": "src"
+    }
+  }
+}
