@@ -80,7 +80,7 @@ abstract class Tags
     {
         $this->inputPath = $inputPath;
         $this->outputPath = $outputPath;
-        $this->url = $url . '/' . $this->outputPath;
+        $this->url = str_replace('../', null, $url) . '/' . $this->outputPath;
         $this->quality = $quality;
 
         $this->meta = new \SimpleXMLIterator('<meta/>');

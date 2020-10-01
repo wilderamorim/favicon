@@ -3,7 +3,7 @@
 require dirname(__DIR__, 1) . '/vendor/autoload.php';
 
 
-//use ElePHPant\Favicon\Favicon;
+use ElePHPant\Favicon\Favicon;
 
 $favicon = (new Favicon('source.png', 'assets/images/favicon', 'http://localhost/packagist.org/favicon/example'))
     ->favicon()
