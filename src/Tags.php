@@ -28,7 +28,7 @@ abstract class Tags
     /** @var string */
     protected $websiteTitle;
 
-    /** @var null */
+    /** @var string|null */
     protected $rssFeedUrl = null;
 
     /** @var int */
