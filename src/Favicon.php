@@ -18,19 +18,29 @@ class Favicon extends Tags
 {
     /**
      * Favicon constructor.
-     * @param string $inputPath
-     * @param string $outputPath
-     * @param string $url
-     * @param int $quality
+     * @param string $sourceImage
+     * @param string $saveInPath
+     * @param string $websiteUrl
+     * @param string|null $websiteTitle
+     * @param string|null $backgroundColor
+     * @param string|null $rssFeedUrl
      * @param bool $cropper
      */
-    public function __construct(string $inputPath, string $outputPath, string $url, int $quality = 5, bool $cropper = true)
-    {
-        parent::__construct($inputPath, $outputPath, $url, $quality);
+    public function __construct(
+        string $sourceImage,
+        string $saveInPath,
+        string $websiteUrl,
+        ?string $websiteTitle = null,
+        ?string $backgroundColor = '#FFFFFF',
+        ?string $rssFeedUrl = null,
+        bool $cropper = true
+    ) {
+        parent::__construct($sourceImage, $saveInPath, $websiteUrl, $websiteTitle, $backgroundColor, $rssFeedUrl);
 
         if ($cropper) {
             try {
-                (new Cropper($inputPath, $outputPath, $url, $quality))->create();
+                (new Cropper($sourceImage, $saveInPath, $websiteUrl, $websiteTitle, $backgroundColor, $rssFeedUrl))
+                    ->create();
             } catch (\Exception $e) {
                 //
             }
@@ -44,8 +54,9 @@ class Favicon extends Tags
     {
         $this->appleTouchIconPrecomposed();
         $this->icon();
-        $this->applicationName();
+        $this->applicationName($this->websiteTitle);
         $this->msApplication();
+        $this->msApplicationNotification($this->rssFeedUrl);
 
         return $this;
     }
@@ -56,7 +67,7 @@ class Favicon extends Tags
     private function appleTouchIconPrecomposed(): Favicon
     {
         foreach (self::APPLE_TOUCH_ICON_PRECOMPOSED as $item) {
-            $this->buildLink('apple-touch-icon-precomposed', "{$this->url}/apple-touch-icon-{$item}.png", $item);
+            $this->buildLink('apple-touch-icon-precomposed', "{$this->websiteUrl}/apple-touch-icon-{$item}.png", $item);
         }
 
         return $this;
@@ -68,18 +79,19 @@ class Favicon extends Tags
     private function icon(): Favicon
     {
         foreach (self::ICON as $item) {
-            $this->buildLink('icon', "{$this->url}/favicon-{$item}.png", $item, 'image/png');
+            $this->buildLink('icon', "{$this->websiteUrl}/favicon-{$item}.png", $item, 'image/png');
         }
 
         return $this;
     }
 
     /**
+     * @param string|null $name
      * @return Favicon
      */
-    private function applicationName(): Favicon
+    private function applicationName(?string $name = '&nbsp;'): Favicon
     {
-        $this->buildMeta('name', ['application-name' => '&nbsp;']);
+        $this->buildMeta('name', ['application-name' => $name]);
         return $this;
     }
 
@@ -94,9 +106,25 @@ class Favicon extends Tags
             if ($value == $tileColor) {
                 $this->buildMeta('name', ["msapplication-{$key}" => $value]);
             } else {
-                $this->buildMeta('name', ["msapplication-{$key}" => "{$this->url}/{$value}"]);
+                $this->buildMeta('name', ["msapplication-{$key}" => "{$this->websiteUrl}/{$value}"]);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @param string|null $rss
+     * @return Favicon|null
+     */
+    private function msApplicationNotification(?string $rss = null): ?Favicon
+    {
+        if (!$rss) {
+            return null;
+        }
+
+        $content = "frequency=30;polling-uri=https://notifications.buildmypinnedsite.com/?feed={$rss}&id=1;polling-uri2=https://notifications.buildmypinnedsite.com/?feed={$rss}&id=2;polling-uri3=https://notifications.buildmypinnedsite.com/?feed={$rss}&id=3;polling-uri4=https://notifications.buildmypinnedsite.com/?feed={$rss}&id=4;polling-uri5=https://notifications.buildmypinnedsite.com/?feed={$rss}&id=5;cycle=1";
+        $this->buildMeta('name', ['msapplication-notification' => $content]);
 
         return $this;
     }

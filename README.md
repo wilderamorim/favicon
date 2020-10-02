@@ -46,16 +46,18 @@ $favicon = (new Favicon('source.png', 'img/ico', 'https://site.com'))
 <head>
     <meta charset="UTF-8">
     <title>Document</title>
-    <?= $favicon; ?> <!-- call object here -->
+    <!-- ========== Favicon ========== -->
+    <?= $favicon; ?>
 </head>
 ```
 
-### Result
+### Basic Result
 
 ```html
 <head>
     <meta charset="UTF-8">
     <title>Document</title>
+    <!-- ========== Favicon ========== -->
     <link rel="apple-touch-icon-precomposed" href="https://site.com/img/ico/apple-touch-icon-57x57.png" sizes="57x57"/>
     <link rel="apple-touch-icon-precomposed" href="https://site.com/img/ico/apple-touch-icon-114x114.png" sizes="114x114"/>
     <link rel="apple-touch-icon-precomposed" href="https://site.com/img/ico/apple-touch-icon-72x72.png" sizes="72x72"/>
@@ -77,6 +79,12 @@ $favicon = (new Favicon('source.png', 'img/ico', 'https://site.com'))
     <meta name="msapplication-wide310x150logo" content="https://site.com/img/ico/mstile-310x150.png"/>
     <meta name="msapplication-square310x310logo" content="https://site.com/img/ico/mstile-310x310.png"/>
 </head>
+```
+
+### RSS (optional parameter)
+
+```html
+<meta name="msapplication-notification" content="frequency=30;polling-uri=https://notifications.buildmypinnedsite.com/?feed=https://site.com/rss.xml.xml&amp;id=1;polling-uri2=https://notifications.buildmypinnedsite.com/?feed=https://site.com/rss.xml.xml&amp;id=2;polling-uri3=https://notifications.buildmypinnedsite.com/?feed=https://site.com/rss.xml.xml&amp;id=3;polling-uri4=https://notifications.buildmypinnedsite.com/?feed=https://site.com/rss.xml.xml&amp;id=4;polling-uri5=https://notifications.buildmypinnedsite.com/?feed=https://site.com/rss.xml.xml&amp;id=5;cycle=1"/>
 ```
 
 ## Contributing

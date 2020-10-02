@@ -34,18 +34,18 @@ class Cropper extends Tags
      */
     public function create()
     {
-        if (!file_exists($this->inputPath)) {
+        if (!file_exists($this->sourceImage)) {
             return 'Image not found';
         }
 
-        $this->imageMime = mime_content_type($this->inputPath);
+        $this->imageMime = mime_content_type($this->sourceImage);
 
         if (!in_array($this->imageMime, self::$allowedExt)) {
             return 'Not a valid JPG or PNG image';
         }
 
-        if (!file_exists($this->outputPath) || !is_dir($this->outputPath)) {
-            if (!mkdir($this->outputPath, 0755)) {
+        if (!file_exists($this->saveInPath) || !is_dir($this->saveInPath)) {
+            if (!mkdir($this->saveInPath, 0755)) {
                 throw new \Exception('Could not create cache folder');
             }
         }
@@ -74,7 +74,7 @@ class Cropper extends Tags
             $this->image($thumb, $width, $height);
         }
 
-        return "{$this->outputPath}/{$this->imageName}";
+        return "{$this->saveInPath}/{$this->imageName}";
     }
 
     /**
@@ -84,12 +84,12 @@ class Cropper extends Tags
      */
     private function image($thumb, int $width, int $height)
     {
-        $source = ($this->imageMime == self::$allowedExt[1] ? imagecreatefromjpeg($this->inputPath) : imagecreatefrompng($this->inputPath));
+        $source = ($this->imageMime == self::$allowedExt[1] ? imagecreatefromjpeg($this->sourceImage) : imagecreatefrompng($this->sourceImage));
 
         imagealphablending($thumb, false);
         imagesavealpha($thumb, true);
         $this->resample($thumb, $source, $width, $height);
-        imagepng($thumb, "{$this->outputPath}/{$this->imageName}.png", $this->quality);
+        imagepng($thumb, "{$this->saveInPath}/{$this->imageName}.png", $this->quality);
 
         imagedestroy($thumb);
         imagedestroy($source);
@@ -104,7 +104,7 @@ class Cropper extends Tags
      */
     private function resample($thumb, $source, int $width, int $height): bool
     {
-        list($src_w, $src_h) = getimagesize($this->inputPath);
+        list($src_w, $src_h) = getimagesize($this->sourceImage);
         $src_x = 0;
         $src_y = 0;
 
